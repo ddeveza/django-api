@@ -1,13 +1,23 @@
 from django.http import JsonResponse
 from .models import Api
 from .serializers import ApiSerializer
+from rest_framework import generics
 
 
-def api_list (request):
-    #get all the drinks
-    api = Api.objects.all()
-  
-    #serialize them
-    serializer = ApiSerializer(api, many=True)
-    #return jason
-    return JsonResponse(serializer.data , safe=False)
+class Get(generics.ListAPIView):
+    serializer_class = ApiSerializer
+    queryset = Api.objects.all()
+
+
+class Post(generics.CreateAPIView):
+    queryset = Api.objects.all()
+    serializer_class = ApiSerializer
+   
+class Update(generics.RetrieveAPIView, generics.UpdateAPIView):
+    queryset = Api.objects.all()
+    serializer_class = ApiSerializer
+
+
+class Delete(generics.DestroyAPIView):
+    queryset = Api.objects.all()
+    serializer_class = ApiSerializer
